@@ -1,203 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Free Fire Test Push</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --primary-red: #d92b2b; --text-dark: #333333; --text-secondary: #666666; --border-gray: #e5e5e5; --bg-gray: #f7f8fa; --diamond-blue: #4da6e6; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .container { width: 100%; max-width: 900px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; padding-bottom: 40px; }
-        .header { background: linear-gradient(to right, #1a1a1a, #4a4a4a); background-blend-mode: multiply; padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
-        .header-content { display: flex; flex-direction: column; gap: 4px; }
-        .header-title { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
-        .header-title i { color: #ffc107; }
-        .header-badge { display: inline-flex; align-items: center; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 20px; font-size: 11px; gap: 6px; }
-        .section { padding: 20px 30px; }
-        .section-title { display: flex; align-items: center; font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; }
-        .step-badge { background-color: var(--primary-red); color: #fff; font-size: 12px; font-weight: 800; padding: 3px 7px; border-radius: 4px; margin-right: 10px; }
-        .login-card { background-color: var(--bg-gray); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .input-label { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 8px; }
-        .input-group { display: flex; width: 100%; }
-        .input-group input { flex: 1; padding: 12px 15px; border: 1px solid var(--border-gray); border-right: none; border-radius: 6px 0 0 6px; outline: none; font-size: 14px; }
-        .btn-login { background-color: var(--primary-red); color: #ffffff; border: none; padding: 0 25px; font-weight: 700; border-radius: 0 6px 6px 0; cursor: pointer; font-size: 14px; transition: 0.2s; white-space: nowrap; }
-        .social-login { display: flex; flex-wrap: wrap; align-items: center; gap: 15px; color: var(--text-secondary); font-size: 14px; }
-        .social-icons { display: flex; gap: 10px; }
-        .social-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; cursor: pointer; }
-        .social-icon.fb { background-color: #1877f2; } .social-icon.go { background-color: #ffffff; border: 1px solid #e0e0e0; color: #ea4335; } .social-icon.tw { background-color: #000000; } .social-icon.dc { background-color: #5865f2; }
-        .tabs { display: flex; gap: 15px; margin-bottom: 20px; }
-        .tab-btn { padding: 8px 25px; border-radius: 30px; border: 1px solid var(--border-gray); background: transparent; font-size: 14px; font-weight: 500; cursor: pointer; color: #b0b0b0; }
-        .tab-btn.active { border-color: var(--primary-red); color: var(--primary-red); font-weight: 600; }
-        .diamond-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; } /* Adjusted for mobile */
-        .diamond-card { border: 1px solid var(--border-gray); border-radius: 8px; padding: 15px 0; text-align: center; background: #fff; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 6px; font-weight: 600; color: var(--text-dark); font-size: 14px; }
-        .sub-title { font-size: 15px; font-weight: 600; color: var(--text-secondary); margin-bottom: 15px; }
-        .deals-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; } /* Adjusted for mobile */
-        .deal-card { border: 1px solid var(--border-gray); border-radius: 8px; overflow: hidden; cursor: pointer; background: #fff; text-align: center; padding-bottom: 15px; transition: 0.2s; }
-        .deal-img { height: 80px; display: flex; justify-content: center; align-items: center; color: #fff; }
-        .deal-img.w { background: linear-gradient(135deg, #7b43c1, #a35ee0); } .deal-img.m { background: linear-gradient(135deg, #f79837, #fbc352); } .deal-img.wl { background: linear-gradient(135deg, #1e95e0, #5bbaf2); }
-        .deal-img i { font-size: 30px; }
-        .deal-text { display: flex; justify-content: center; align-items: center; gap: 6px; padding-top: 12px; font-size: 14px; font-weight: 500; color: var(--text-dark); }
-        .payment-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; } /* Adjusted for mobile */
-        .payment-card { border: 1px solid var(--border-gray); border-radius: 8px; padding: 15px 20px; display: flex; align-items: center; gap: 15px; background: #fff; cursor: pointer; transition: 0.2s; }
-        .payment-card .p-logo { width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 4px; font-size: 20px; }
-        .p-logo.shopeepay { background: #ee4d2d; color: #fff; border-radius: 6px; font-size: 12px; font-weight: bold; }
-        .p-logo.shells { background: #ffe600; color: #222; border-radius: 50%; font-size: 18px; }
-        .p-logo.visa { background: transparent; color: #1a1f71; font-size: 24px; }
-        .p-logo.razer { background: #00ff00; color: #000; border-radius: 50%; font-size: 18px; }
-        .payment-text { font-size: 14px; font-weight: 600; color: var(--text-dark); }
-        
-        /* ===== ADDED CSS ===== */
-        .diamond-card.selected, .deal-card.selected, .payment-card.selected { border: 2px solid var(--primary-red) !important; background-color: #fff9f9; }
-        #result-box { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; font-weight: 500; font-size: 14px; }
-        #result-box.success { display: block; border: 1px solid #c3e6cb; background-color: #d4edda; color: #155724; }
-        #result-box.error { display: block; border: 1px solid #f5c6cb; background-color: #f8d7da; color: #721c24; }
-        
-        @media (max-width: 480px) {
-            .diamond-grid { grid-template-columns: repeat(2, 1fr); }
-            .deals-grid { grid-template-columns: 1fr; }
-            .payment-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sochhat Rotha | Bio</title>
+
+  <!-- Tailwind CSS (lightweight CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 (Icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    // Native macOS Dark Mode Detection
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+    }
+    // Listen for OS theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        document.documentElement.classList.toggle('dark', event.matches);
+    });
+  </script>
+
+  <style>
+    /* ==========================================================================
+       1. MACOS APPLE SYSTEM FONTS & CORE RESET
+       ========================================================================== */
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; background: #F5F5F7; transition: background 0.3s; }
+    .dark body { background: #1E1E1E; }
+    * { box-sizing: border-box; }
+
+    /* Native macOS Scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #C1C1C1; border-radius: 20px; }
+    .dark ::-webkit-scrollbar-thumb { background: #3A3A3C; }
+
+    /* ==========================================================================
+       2. MACOS WINDOW & TRAFFIC LIGHTS
+       ========================================================================== */
+    .mac-window {
+        position: relative; max-width: 900px; width: 100%; min-height: 90vh; max-height: 900px;
+        background: #ffffff; border-radius: 16px; margin: 20px auto;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.12); border: 1px solid rgba(255,255,255,0.6);
+        display: flex; flex-direction: row; overflow: hidden; transition: background 0.3s, border-color 0.3s;
+    }
+    .dark .mac-window { background: #2C2C2E; border: 1px solid rgba(255,255,255,0.1); }
+
+    /* macOS Traffic Light System */
+    .mac-traffic-lights {
+        display: flex; gap: 8px; position: absolute; top: 18px; left: 20px; z-index: 50; cursor: pointer;
+    }
+    .mac-traffic-lights div {
+        width: 13px; height: 13px; border-radius: 50%; transition: all 0.2s ease;
+    }
+    .tl-red { background: #FF5F56; } .tl-red:active { transform: scale(0.85); background: #e0443b; }
+    .tl-yellow { background: #FFBD2E; } .tl-yellow:active { transform: scale(0.85); background: #d69a1a; }
+    .tl-green { background: #27C93F; } .tl-green:active { transform: scale(0.85); background: #1a9a2e; }
+
+    /* ==========================================================================
+       3. APPLE GLASSMORPHISM & FINDER SIDEBAR
+       ========================================================================== */
+    .app-sidebar {
+        background: rgba(245, 245, 247, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(0,0,0,0.05); width: 240px; flex-shrink: 0; padding: 60px 12px 16px;
+        display: flex; flex-direction: column; transition: background 0.3s, border-color 0.3s;
+    }
+    .dark .app-sidebar { background: rgba(0, 0, 0, 0.5); border-right: 1px solid rgba(255,255,255,0.08); }
+
+    /* Sidebar Nav Items */
+    .nav-item {
+        display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px;
+        font-size: 14px; font-weight: 500; color: #1d1d1f; cursor: pointer; transition: all 0.2s;
+    }
+    .dark .nav-item { color: #e5e5ea; }
+    .nav-item:hover { background: rgba(0,0,0,0.05); }
+    .dark .nav-item:hover { background: rgba(255,255,255,0.08); }
+    .nav-item.active { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
+
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+        .mac-window { flex-direction: column; max-height: none; border-radius: 0; margin: 0; height: 100vh; }
+        .app-sidebar { display: none; }
+        .mac-traffic-lights { top: 12px; left: 16px; }
+    }
+  </style>
 </head>
-<body>
+<body class="flex items-center justify-center p-0 md:p-6">
 
-<div class="container">
-    <header class="header">
-        <div class="header-content">
-            <div class="header-title"><i class="fas fa-fire"></i> Free Fire</div>
-            <div class="header-badge"><i class="fas fa-lock"></i> 100% Secure Payment</div>
+  <!-- ==========================================================================
+       MAIN MACOS WINDOW
+       ========================================================================== -->
+  <div class="mac-window">
+
+    <!-- Traffic Lights (Top Left) -->
+    <div class="mac-traffic-lights">
+        <div class="tl-red" title="Close"></div>
+        <div class="tl-yellow" title="Minimize"></div>
+        <div class="tl-green" title="Maximize"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="app-sidebar">
+      <div class="flex items-center gap-3 mb-8 px-2 mt-8">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold shadow-sm text-lg">
+          SR
         </div>
-    </header>
-
-    <section class="section">
-        <div class="section-title"><span class="step-badge">1</span> Player Info</div>
-        <div class="login-card">
-            <div>
-                <div class="input-label">Player ID <i class="fas fa-circle-info"></i></div>
-                <div class="input-group">
-                    <input type="text" id="playerId" placeholder="Enter Player ID to test push" value="36476376485">
-                    <button id="pushBtn" class="btn-login">Push Test</button>
-                </div>
-            </div>
-            <div class="social-login">
-                <span>Or login with your game account</span>
-                <div class="social-icons">
-                    <div class="social-icon fb"><i class="fab fa-facebook-f"></i></div>
-                    <div class="social-icon go"><i class="fab fa-google"></i></div>
-                    <div class="social-icon tw"><i class="fa-brands fa-x-twitter"></i></div>
-                    <div class="social-icon dc"><i class="fab fa-discord"></i></div>
-                </div>
-            </div>
-            <div id="result-box"></div>
+        <div>
+          <div class="font-bold text-sm tracking-tight dark:text-white">Sochhat Rotha</div>
+          <div class="text-[10px] text-gray-500 dark:text-gray-400">Personal Links</div>
         </div>
-    </section>
+      </div>
 
-    <section class="section">
-        <div class="section-title"><span class="step-badge">2</span> Top-up Amount</div>
-        <div class="tabs">
-            <button class="tab-btn active">Purchase</button>
-            <button class="tab-btn">Redeem</button>
+      <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider px-2 mb-2 font-semibold">Menu</div>
+      <div class="nav-item active"><i class="w-5 text-[#007AFF] fa-solid fa-link"></i> My Links</div>
+      <div class="nav-item"><i class="w-5 text-gray-400 fa-solid fa-envelope"></i> Contact Me</div>
+
+      <div class="mt-auto pt-4 border-t border-gray-200/60 dark:border-white/5 w-full">
+        <div class="px-2 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+          <i class="fa-solid fa-circle text-[#34C759] text-[8px]"></i> Always Active
         </div>
+      </div>
+    </aside>
 
-        <div class="diamond-grid">
-            <div class="diamond-card"><i class="fas fa-gem"></i> 25</div>
-            <div class="diamond-card"><i class="fas fa-gem"></i> 100</div>
-            <div class="diamond-card"><i class="fas fa-gem"></i> 310</div>
-            <div class="diamond-card"><i class="fas fa-gem"></i> 520</div>
-            <div class="diamond-card"><i class="fas fa-gem"></i> 1,060</div>
-            <div class="diamond-card"><i class="fas fa-gem"></i> 2,180</div>
-            <div class="diamond-card"><i class="fas fa-gem"></i> 5,600</div>
-            <div class="diamond-card"><i class="fas fa-gem"></i> 11,500</div>
+    <!-- Main Content Container -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative w-full bg-[#F5F5F7] dark:bg-[#1E1E1E]">
+
+      <!-- Top Header (Always Visible) -->
+      <div class="pt-14 px-4 md:px-8 pb-4 flex justify-between items-center bg-[#F5F5F7] dark:bg-[#1E1E1E] z-20">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight">Profile</h1>
+          <span class="text-xs text-gray-500 dark:text-gray-400 block">Connect with me on social media</span>
+        </div>
+      </div>
+
+      <!-- Scrollable Content Area -->
+      <div class="flex-1 overflow-y-auto px-4 md:px-8 pb-20 md:pb-8 space-y-6 relative">
+
+        <!-- Hero Banner -->
+        <div class="w-full rounded-2xl bg-gradient-to-r from-[#007AFF] to-[#5856D6] relative overflow-hidden shadow-md text-white flex items-center p-6 md:p-8 transform transition hover:scale-[1.01]">
+          <div class="z-10 relative">
+            <h2 class="text-2xl md:text-3xl font-bold leading-tight mb-2">Hi, I'm Sochhat Rotha 👋</h2>
+            <p class="text-blue-100 text-sm opacity-90 max-w-[250px] md:max-w-none">Welcome to my personal digital space. Find all my social links below!</p>
+          </div>
+          <i class="fa-solid fa-user-astronaut absolute right-[-20px] bottom-[-20px] text-[120px] md:text-[150px] text-white opacity-10"></i>
         </div>
 
-        <div class="sub-title">Special Deals</div>
-        <div class="deals-grid">
-            <div class="deal-card"><div class="deal-img w"><i class="fas fa-gem"></i></div><div class="deal-text">Weekly Membership</div></div>
-            <div class="deal-card"><div class="deal-img m"><i class="fas fa-gem"></i></div><div class="deal-text">Monthly Membership</div></div>
-            <div class="deal-card"><div class="deal-img wl"><i class="fas fa-gem"></i></div><div class="deal-text">Weekly Lite</div></div>
+        <!-- Social Links 2x2 Grid -->
+        <div>
+          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Official Links</h3>
+          <!-- The grid-cols-2 class forces the 2x2 layout -->
+          <div class="grid grid-cols-2 gap-4">
+            
+            <!-- Facebook Button -->
+            <a href="https://www.facebook.com/share/1FEAEKGchk/" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#1877F2] text-white flex flex-col items-center justify-center p-4 text-center">
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
+              <i class="fa-brands fa-facebook text-3xl mb-2 z-10 drop-shadow-sm"></i>
+              <span class="font-bold text-sm drop-shadow-md z-10">Facebook</span>
+              <span class="text-[10px] opacity-80 z-10">Follow me</span>
+              <i class="fa-brands fa-facebook absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
+            </a>
+
+            <!-- TikTok Button -->
+            <!-- Placeholder link here until you add your TikTok -->
+            <a href="#" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#000000] text-white flex flex-col items-center justify-center p-4 text-center border border-gray-800">
+              <div class="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition"></div>
+              <i class="fa-brands fa-tiktok text-3xl mb-2 z-10 drop-shadow-sm"></i>
+              <span class="font-bold text-sm drop-shadow-md z-10">TikTok</span>
+              <span class="text-[10px] opacity-80 z-10">Watch videos</span>
+              <i class="fa-brands fa-tiktok absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
+            </a>
+
+            <!-- Telegram Button -->
+            <a href="https://t.me/sochhat_rotha" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#229ED9] text-white flex flex-col items-center justify-center p-4 text-center">
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
+              <i class="fa-brands fa-telegram text-3xl mb-2 z-10 drop-shadow-sm"></i>
+              <span class="font-bold text-sm drop-shadow-md z-10">Telegram</span>
+              <span class="text-[10px] opacity-80 z-10">Message me</span>
+              <i class="fa-brands fa-telegram absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
+            </a>
+
+            <!-- Instagram Button -->
+            <a href="https://www.instagram.com/rotha_79?igsh=MXdlcXFxeDZ2NnhveQ==" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] text-white flex flex-col items-center justify-center p-4 text-center">
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
+              <i class="fa-brands fa-instagram text-3xl mb-2 z-10 drop-shadow-sm"></i>
+              <span class="font-bold text-sm drop-shadow-md z-10">Instagram</span>
+              <span class="text-[10px] opacity-80 z-10">View photos</span>
+              <i class="fa-brands fa-instagram absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
+            </a>
+
+          </div>
         </div>
-    </section>
-
-    <section class="section">
-        <div class="section-title"><span class="step-badge">3</span> Payment Method</div>
-        <div class="payment-grid">
-            <div class="payment-card"><div class="p-logo shopeepay"><i class="fa-solid fa-bag-shopping"></i></div><div class="payment-text">ShopeePay</div></div>
-            <div class="payment-card"><div class="p-logo shells"><i class="fa-solid fa-shapes"></i></div><div class="payment-text">Garena Shells</div></div>
-            <div class="payment-card"><div class="p-logo visa"><i class="fa-brands fa-cc-visa"></i></div><div class="payment-text">Visa / Mastercard</div></div>
-            <div class="payment-card"><div class="p-logo razer"><i class="fa-solid fa-money-bill-wave"></i></div><div class="payment-text">Razer Gold Wallet</div></div>
-        </div>
-    </section>
-</div>
-
-<script>
-    let selectedAmount = "";
-    let selectedPayment = "";
-
-    function clearSelections() { document.querySelectorAll('.diamond-card, .deal-card, .payment-card').forEach(c => c.classList.remove('selected')); }
-
-    // Click events for Diamonds
-    document.querySelectorAll('.diamond-card').forEach(card => {
-        card.addEventListener('click', function() {
-            clearSelections(); document.querySelectorAll('.deal-card').forEach(c => c.classList.remove('selected'));
-            this.classList.add('selected'); selectedAmount = this.innerText.trim();
-        });
-    });
-
-    // Click events for Deals
-    document.querySelectorAll('.deal-card').forEach(card => {
-        card.addEventListener('click', function() {
-            clearSelections(); document.querySelectorAll('.diamond-card').forEach(c => c.classList.remove('selected'));
-            this.classList.add('selected'); selectedAmount = this.querySelector('.deal-text').innerText.trim();
-        });
-    });
-
-    // Click events for Payments
-    document.querySelectorAll('.payment-card').forEach(card => {
-        card.addEventListener('click', function() {
-            document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
-            this.classList.add('selected'); selectedPayment = this.querySelector('.payment-text').innerText.trim();
-        });
-    });
-
-    // Auto-select default options on mobile for easier testing
-    window.onload = function() {
-        const firstDiamond = document.querySelector('.diamond-card');
-        const firstPayment = document.querySelector('.payment-card');
-        if(firstDiamond) { firstDiamond.click(); }
-        if(firstPayment) { firstPayment.click(); }
-    };
-
-    // Push function
-    document.getElementById('pushBtn').addEventListener('click', async function() {
-        const playerId = document.getElementById('playerId').value;
-        const resultBox = document.getElementById('result-box');
-        const btn = this;
-
-        if (!playerId || !selectedAmount || !selectedPayment) {
-            resultBox.className = 'error';
-            resultBox.innerText = '⚠️ Validation Error: Please enter Player ID, select an Amount, and choose a Payment Method.';
-            return;
-        }
-
-        btn.innerText = 'Pushing...'; btn.style.opacity = '0.7'; resultBox.className = '';
-
-        try {
-            const response = await fetch('/api/push', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ player_id: playerId, amount: selectedAmount, payment_method: selectedPayment })
-            });
-            const data = await response.json();
-            resultBox.className = 'success';
-            resultBox.innerText = '✅ ' + data.message;
-        } catch (error) {
-            resultBox.className = 'error';
-            resultBox.innerText = '❌ Error connecting to Python backend. Is Flask running?';
-        } finally {
-            btn.innerText = 'Push Test'; btn.style.opacity = '1';
-        }
-    });
-</script>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
