@@ -6,65 +6,60 @@
   <title>Sochhat Rotha | Premium Bio</title>
 
   <!-- 1. STRICT TAILWIND CONFIGURATION FOR DARK MODE -->
+  <!-- This must come BEFORE the Tailwind script to work properly -->
   <script>
-    window.tailwind = {
+    tailwind = {
       config: {
-        darkMode: 'class', // This tells Tailwind to use the 'dark' class on the HTML tag
+        darkMode: 'class', // Enables manual dark mode toggling
       }
-    };
+    }
   </script>
-  <!-- 2. LOAD TAILWIND CSS -->
+
+  <!-- Tailwind CSS (lightweight CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- 3. LOAD ICONS -->
+  <!-- FontAwesome 6 (Icons) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- 4. INSTANT THEME SCRIPT (Prevents white flash on load) -->
+  <!-- 2. FLAWLESS THEME LOGIC -->
   <script>
-    // Run this immediately before the body renders
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    // Check if user saved a preference, otherwise fall back to system preference
-    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+    // Run this instantly before the page loads to prevent "flashing" bright light
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
     } else {
         document.documentElement.classList.remove('dark');
     }
 
-    // Toggle function for the button
+    // Toggle Function when button is clicked
     function toggleTheme() {
         const html = document.documentElement;
         html.classList.toggle('dark');
         
-        const isDark = html.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light'); // Save preference
-        
+        // Save choice to browser memory
+        if (html.classList.contains('dark')) {
+            localStorage.theme = 'dark';
+        } else {
+            localStorage.theme = 'light';
+        }
         updateThemeIcon();
     }
 
-    // Function to animate and swap the icon
+    // Spin animation and icon change
     function updateThemeIcon() {
         const isDark = document.documentElement.classList.contains('dark');
         const icon = document.getElementById('theme-icon');
-        const btn = document.getElementById('theme-toggle-btn');
-        
-        if (icon && btn) {
+        if (icon) {
             if (isDark) {
-                // Dark Mode: Show Sun
                 icon.className = 'fa-solid fa-sun text-yellow-400 text-lg transform transition-transform duration-500 rotate-180';
-                btn.className = 'w-10 h-10 rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-500 active:scale-90 cursor-pointer outline-none bg-[#2C2C2E] border border-gray-700';
             } else {
-                // Light Mode: Show Moon
                 icon.className = 'fa-solid fa-moon text-indigo-500 text-lg transform transition-transform duration-500 rotate-0';
-                btn.className = 'w-10 h-10 rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-500 active:scale-90 cursor-pointer outline-none bg-white border border-gray-200';
             }
         }
     }
 
-    // Run when the DOM is fully loaded to set initial icon state
+    // Update icon when the page finishes loading
     window.addEventListener('DOMContentLoaded', updateThemeIcon);
 
-    // Mobile Dock Navigation
+    // Smooth scroll for mobile dock
     function scrollToSection(id) {
         document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
     }
@@ -72,11 +67,11 @@
 
   <style>
     /* ==========================================================================
-       1. MACOS APPLE SYSTEM FONTS & CORE RESET
+       3. MACOS SYSTEM FONTS & RESET
        ========================================================================== */
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; background: #F5F5F7; transition: background 0.5s ease; }
-    .dark body { background: #1E1E1E; }
-    * { box-sizing: border-box; }
+    .dark body { background: #111111; }
+    * { box-sizing: border-box; scroll-behavior: smooth; }
 
     /* Native macOS Scrollbars */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -85,7 +80,7 @@
     .dark ::-webkit-scrollbar-thumb { background: #3A3A3C; }
 
     /* ==========================================================================
-       2. MACOS WINDOW & TRAFFIC LIGHTS
+       4. MACOS WINDOW UI
        ========================================================================== */
     .mac-window {
         position: relative; max-width: 900px; width: 100%; min-height: 90vh; max-height: 900px;
@@ -93,25 +88,23 @@
         box-shadow: 0 20px 50px rgba(0,0,0,0.12); border: 1px solid rgba(255,255,255,0.6);
         display: flex; flex-direction: row; overflow: hidden; transition: background 0.5s ease, border-color 0.5s ease;
     }
-    .dark .mac-window { background: #2C2C2E; border: 1px solid rgba(255,255,255,0.1); }
+    .dark .mac-window { background: #1C1C1E; border: 1px solid rgba(255,255,255,0.05); }
 
-    .mac-traffic-lights {
-        display: flex; gap: 8px; position: absolute; top: 18px; left: 20px; z-index: 50; cursor: pointer;
-    }
+    .mac-traffic-lights { display: flex; gap: 8px; position: absolute; top: 18px; left: 20px; z-index: 50; cursor: pointer; }
     .mac-traffic-lights div { width: 13px; height: 13px; border-radius: 50%; transition: all 0.2s ease; }
     .tl-red { background: #FF5F56; } .tl-red:active { transform: scale(0.85); background: #e0443b; }
     .tl-yellow { background: #FFBD2E; } .tl-yellow:active { transform: scale(0.85); background: #d69a1a; }
     .tl-green { background: #27C93F; } .tl-green:active { transform: scale(0.85); background: #1a9a2e; }
 
     /* ==========================================================================
-       3. APPLE GLASSMORPHISM & FINDER SIDEBAR
+       5. APPLE SIDEBAR & GLASSMORPHISM
        ========================================================================== */
     .app-sidebar {
         background: rgba(245, 245, 247, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
         border-right: 1px solid rgba(0,0,0,0.05); width: 240px; flex-shrink: 0; padding: 60px 12px 16px;
-        display: flex; flex-direction: column; transition: background 0.3s, border-color 0.3s;
+        display: flex; flex-direction: column; transition: background 0.5s ease, border-color 0.5s ease;
     }
-    .dark .app-sidebar { background: rgba(0, 0, 0, 0.5); border-right: 1px solid rgba(255,255,255,0.08); }
+    .dark .app-sidebar { background: rgba(20, 20, 22, 0.7); border-right: 1px solid rgba(255,255,255,0.05); }
 
     .nav-item {
         display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px;
@@ -123,46 +116,43 @@
     .nav-item.active { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
 
     /* ==========================================================================
-       4. MOBILE DOCK
+       6. MOBILE DOCK (Bottom Menu)
        ========================================================================== */
     .mac-dock {
         display: none; position: sticky; bottom: 0; margin-top: auto; width: 100%; z-index: 50;
-        background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        border-top: 1px solid rgba(0,0,0,0.05); padding: 8px 16px 16px; justify-content: space-around;
-        border-radius: 16px 16px 0 0; transition: background 0.3s;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(0,0,0,0.05); padding: 12px 16px 20px; justify-content: space-around;
+        border-radius: 16px 16px 0 0; transition: background 0.5s ease;
     }
-    .dark .mac-dock { background: rgba(30, 30, 30, 0.85); border-top: 1px solid rgba(255,255,255,0.05); }
+    .dark .mac-dock { background: rgba(28, 28, 30, 0.85); border-top: 1px solid rgba(255,255,255,0.05); }
     
-    .dock-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; gap: 2px; }
+    .dock-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 600; color: #888; cursor: pointer; transition: all 0.2s; gap: 4px; }
     .dark .dock-item { color: #8e8e93; }
     .dock-item.active { color: #007AFF; }
-    .dock-item i { font-size: 20px; margin-bottom: 2px; }
-    .dock-item:hover { transform: scale(1.05); color: #000; }
-    .dark .dock-item:hover { color: #fff; }
+    .dock-item i { font-size: 20px; transition: transform 0.2s; }
+    .dock-item:active i { transform: scale(0.9); }
 
     /* Responsive Layout */
     @media (max-width: 768px) {
-        .mac-window { flex-direction: column; max-height: none; border-radius: 0; margin: 0; height: 100vh; }
+        .mac-window { flex-direction: column; max-height: none; border-radius: 0; margin: 0; height: 100vh; border: none; }
         .app-sidebar { display: none; }
         .mac-dock { display: flex; } 
         .mac-traffic-lights { top: 12px; left: 16px; }
     }
   </style>
 </head>
-
 <body class="flex items-center justify-center p-0 md:p-6">
 
-  <!-- MAIN MACOS WINDOW -->
   <div class="mac-window">
 
-    <!-- Traffic Lights (Top Left) -->
+    <!-- Traffic Lights -->
     <div class="mac-traffic-lights">
         <div class="tl-red" title="Close"></div>
         <div class="tl-yellow" title="Minimize"></div>
         <div class="tl-green" title="Maximize"></div>
     </div>
 
-    <!-- Desktop Sidebar (Hidden on Mobile) -->
+    <!-- Desktop Sidebar -->
     <aside class="app-sidebar">
       <div class="flex items-center gap-3 mb-8 px-2 mt-8">
         <!-- SR Text Logo -->
@@ -170,35 +160,35 @@
           SR
         </div>
         <div>
-          <div class="font-bold text-sm tracking-tight dark:text-white">Sochhat Rotha</div>
-          <div class="text-[10px] text-gray-500 dark:text-gray-400">Personal Links</div>
+          <div class="font-bold text-sm tracking-tight dark:text-white transition-colors duration-500">Sochhat Rotha</div>
+          <div class="text-[10px] text-gray-500 dark:text-gray-400 transition-colors duration-500">Personal Links</div>
         </div>
       </div>
 
       <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider px-2 mb-2 font-semibold">Menu</div>
       <div class="nav-item active" onclick="scrollToSection('hero-section')"><i class="w-5 text-[#007AFF] fa-solid fa-link"></i> My Links</div>
       <div class="nav-item" onclick="scrollToSection('services-section')"><i class="w-5 text-[#34C759] fa-solid fa-rocket"></i> Services</div>
-      <div class="nav-item" onclick="scrollToSection('contact-form')"><i class="w-5 text-gray-400 fa-solid fa-message"></i> Direct Chat</div>
+      <div class="nav-item" onclick="scrollToSection('contact-section')"><i class="w-5 text-[#FF3B30] fa-solid fa-paper-plane"></i> Contact Me</div>
 
-      <div class="mt-auto pt-4 border-t border-gray-200/60 dark:border-white/5 w-full">
+      <div class="mt-auto pt-4 border-t border-gray-200/60 dark:border-white/5 w-full transition-colors duration-500">
         <div class="px-2 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
           <i class="fa-solid fa-circle text-[#34C759] text-[8px]"></i> System Online
         </div>
       </div>
     </aside>
 
-    <!-- Main Content Container -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden relative w-full bg-[#F5F5F7] dark:bg-[#1E1E1E] transition-colors duration-500">
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative w-full bg-[#F5F5F7] dark:bg-[#000000] transition-colors duration-500">
 
-      <!-- Top Header (Always Visible) -->
-      <div class="pt-14 px-4 md:px-8 pb-4 flex justify-between items-center bg-[#F5F5F7] dark:bg-[#1E1E1E] z-20 transition-colors duration-500">
+      <!-- Header -->
+      <div class="pt-14 px-4 md:px-8 pb-4 flex justify-between items-center bg-[#F5F5F7] dark:bg-[#000000] z-20 transition-colors duration-500">
         <div>
           <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight transition-colors duration-500">Profile</h1>
           <span class="text-xs text-gray-500 dark:text-gray-400 block transition-colors duration-500">Connect with me on social media</span>
         </div>
         
-        <!-- THEME TOGGLE BUTTON -->
-        <button id="theme-toggle-btn" onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-500 active:scale-90 cursor-pointer outline-none">
+        <!-- Toggle Button -->
+        <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-gray-800 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-90 cursor-pointer outline-none">
             <i id="theme-icon" class="fa-solid fa-moon text-indigo-500 text-lg"></i>
         </button>
       </div>
@@ -209,27 +199,23 @@
         <!-- Hero Banner -->
         <div id="hero-section" class="w-full rounded-2xl bg-gradient-to-r from-[#007AFF] to-[#5856D6] relative overflow-hidden shadow-md text-white p-6 md:p-8 transform transition hover:scale-[1.01]">
           <div class="z-10 relative flex flex-col gap-2">
-            
             <h2 class="text-2xl md:text-3xl font-bold leading-tight flex items-center gap-3">
-              Hi, I'm Sochhat Rotha 
-              <!-- Pulsing Live Status Dot -->
+              Hi, I'm Sochhat Rotha 👋
               <span class="relative flex h-3 w-3">
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                   <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 border border-white"></span>
               </span>
             </h2>
-            
             <p class="text-blue-100 text-sm opacity-90 max-w-[280px] md:max-w-none">
               Telegram Bot Developer, Content Creator, and Tech Enthusiast. Find all my official links and services below!
             </p>
-            
           </div>
           <i class="fa-solid fa-user-astronaut absolute right-[-20px] bottom-[-20px] text-[120px] md:text-[150px] text-white opacity-10"></i>
         </div>
 
-        <!-- Social Links 2x2 Grid -->
+        <!-- Official Links 2x2 Grid -->
         <div>
-          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Official Links</h3>
+          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 transition-colors duration-500">Official Links</h3>
           <div class="grid grid-cols-2 gap-4">
             
             <a href="https://www.facebook.com/share/1FEAEKGchk/" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#1877F2] text-white flex flex-col items-center justify-center p-4 text-center">
@@ -240,8 +226,7 @@
               <i class="fa-brands fa-facebook absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
             </a>
 
-            <!-- TikTok Placeholder -->
-            <a href="#" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#000000] text-white flex flex-col items-center justify-center p-4 text-center border border-gray-800">
+            <a href="#" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#000000] dark:bg-[#1C1C1E] dark:border dark:border-white/10 text-white flex flex-col items-center justify-center p-4 text-center border border-gray-800">
               <div class="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition"></div>
               <i class="fa-brands fa-tiktok text-3xl mb-2 z-10 drop-shadow-sm"></i>
               <span class="font-bold text-sm drop-shadow-md z-10">TikTok</span>
@@ -269,42 +254,49 @@
 
         <!-- SERVICES SECTION -->
         <div id="services-section" class="mt-6">
-          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">My Services & Bots</h3>
+          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 transition-colors duration-500">My Services & Bots</h3>
           <div class="flex flex-col gap-3">
             
-            <a href="https://t.me/Primerinox" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all cursor-pointer">
+            <a href="https://t.me/Primerinox" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-[#229ED9]"><i class="fa-brands fa-telegram text-xl"></i></div>
+                <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-[#229ED9]/10 flex items-center justify-center text-[#229ED9]"><i class="fa-brands fa-telegram text-xl"></i></div>
                 <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#007AFF] transition-colors">Sell Channel</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@Primerinox</p></div>
               </div>
               <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-[#007AFF] transition-all"></i>
             </a>
 
-            <a href="https://t.me/mainrinox" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all cursor-pointer">
+            <a href="https://t.me/mainrinox" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-[#229ED9]"><i class="fa-solid fa-bullhorn text-lg"></i></div>
+                <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-[#229ED9]/10 flex items-center justify-center text-[#229ED9]"><i class="fa-solid fa-bullhorn text-lg"></i></div>
                 <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#007AFF] transition-colors">Main Channel</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@mainrinox</p></div>
               </div>
               <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-[#007AFF] transition-all"></i>
             </a>
 
-            <a href="https://t.me/Krypt3nite" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all cursor-pointer">
+            <a href="https://t.me/Krypt3nite" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 flex items-center justify-center text-green-500"><i class="fa-solid fa-headset text-lg"></i></div>
+                <div class="w-10 h-10 rounded-full bg-green-50 dark:bg-[#34C759]/10 flex items-center justify-center text-green-500"><i class="fa-solid fa-headset text-lg"></i></div>
                 <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-green-500 transition-colors">Support</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@Krypt3nite</p></div>
               </div>
               <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-green-500 transition-all"></i>
             </a>
 
-            <a href="https://t.me/rinox3autobot" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all cursor-pointer">
+            <a href="https://t.me/rinox3autobot" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-500"><i class="fa-solid fa-robot text-lg"></i></div>
+                <div class="w-10 h-10 rounded-full bg-purple-50 dark:bg-[#AF52DE]/10 flex items-center justify-center text-purple-500"><i class="fa-solid fa-robot text-lg"></i></div>
                 <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-purple-500 transition-colors">Telegram Auto Bot</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@rinox3autobot</p></div>
               </div>
               <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-purple-500 transition-all"></i>
             </a>
 
-            <a href="https://www.youtube.com/@Primerinox1" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md transition-all cursor-pointer">
+            <a href="https://www.youtube.com/@Primerinox1" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center text-[#FF0000]"><i class="fa-brands fa-youtube text-xl"></i></div>
-                <div><h4 class="font-bo
+                <div class="w-10 h-10 rounded-full bg-red-50 dark:bg-[#FF3B30]/10 flex items-center justify-center text-[#FF3B30]"><i class="fa-brands fa-youtube text-xl"></i></div>
+                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#FF3B30] transition-colors">Tutorial VDO</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">YouTube Channel</p></div>
+              </div>
+              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-[#FF3B30] transition-all"></i>
+            </a>
+
+            <a href="https://t.me/Fontcov3terbot" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
+              <div class="flex items-center gap-4">
+        
