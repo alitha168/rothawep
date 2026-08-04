@@ -1,412 +1,1019 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Sochhat Rotha Bio</title>
-
-  <!-- 1. LOAD TAILWIND CSS FIRST -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- 2. FORCE TAILWIND TO USE THE TOGGLE BUTTON (NOT THE OS) -->
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-    };
-  </script>
-
-  <!-- FontAwesome 6 (Icons) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- 3. BULLETPROOF THEME LOGIC -->
-  <script>
-    // Safe Initialization on Load
-    function initTheme() {
-        let isDark = false;
-        try {
-            // Try to load saved preference
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                isDark = true;
-            }
-        } catch (e) {
-            // Fallback if localStorage is blocked by browser security
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                isDark = true;
-            }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>បាក់ឌុប 2026 - ស្វែងរកទីតាំងប្រឡង</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --ios-bg: #F2F2F7;
+            --ios-card: #FFFFFF;
+            --ios-secondary-bg: #E8E8ED;
+            --ios-tertiary-bg: #F2F2F7;
+            --accent: #007AFF;
+            --accent-dark: #0066D6;
+            --green-accent: #34C759;
+            --red-accent: #FF3B30;
+            --orange-accent: #FF9500;
+            --text-primary: #000000;
+            --text-secondary: #8E8E93;
+            --text-tertiary: #C7C7CC;
+            --separator: #E5E5EA;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.08);
+            --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Khmer OS Battambang', sans-serif;
+            --transition-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --transition-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }
-
-    // Toggle Function
-    function toggleTheme() {
-        const html = document.documentElement;
-        html.classList.toggle('dark');
-        const isDark = html.classList.contains('dark');
-        
-        try {
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        } catch (e) {
-            console.warn("Local storage blocked, but theme changed for this session.");
-        }
-        
-        updateThemeIcon();
-    }
-
-    // Update Sun/Moon Icon
-    function updateThemeIcon() {
-        const isDark = document.documentElement.classList.contains('dark');
-        const icon = document.getElementById('theme-icon');
-        if (icon) {
-            if (isDark) {
-                icon.className = 'fa-solid fa-sun text-yellow-400 text-lg transform transition-transform duration-500 rotate-180';
-            } else {
-                icon.className = 'fa-solid fa-moon text-indigo-500 text-lg transform transition-transform duration-500 rotate-0';
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --ios-bg: #000000;
+                --ios-card: #1C1C1E;
+                --ios-secondary-bg: #2C2C2E;
+                --ios-tertiary-bg: #3A3A3C;
+                --text-primary: #FFFFFF;
+                --text-secondary: #98989D;
+                --text-tertiary: #636366;
+                --separator: #38383A;
+                --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+                --shadow-md: 0 8px 32px rgba(0,0,0,0.4);
+                --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
             }
         }
-    }
 
-    // Run initialization immediately to prevent flashing
-    initTheme();
-    // Update the icon once the DOM is fully loaded
-    window.addEventListener('DOMContentLoaded', updateThemeIcon);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
 
-    // Smooth scroll for mobile dock navigation
-    function scrollToSection(id) {
-        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    }
+        body {
+            font-family: var(--font-system);
+            background-color: var(--ios-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            padding: env(safe-area-inset-top, 20px) 16px env(safe-area-inset-bottom, 20px);
+            overflow-x: hidden;
+        }
 
-    // Format form data and send to Telegram App
-    function sendToTelegram(event) {
-        event.preventDefault(); // Prevents page from reloading
-        const name = document.getElementById('tg-name').value;
-        const message = document.getElementById('tg-message').value;
-        
-        // Format the message nicely
-        const fullMessage = `Hello, my name is ${name}.\n\n${message}`;
-        
-        // Encode for URL to handle spaces and line breaks
-        const encodedMessage = encodeURIComponent(fullMessage);
-        
-        // Open Telegram with pre-filled message
-        window.open(`https://t.me/sochhat_rotha?text=${encodedMessage}`, '_blank');
-    }
-  </script>
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--ios-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 8px;
+            margin: -20px -16px 20px;
+            border-bottom: 0.5px solid var(--separator);
+        }
 
-  <style>
-    /* ==========================================================================
-       MACOS SYSTEM FONTS & RESET
-       ========================================================================== */
-    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; background: #F5F5F7; transition: background 0.3s ease; }
-    .dark body { background: #111111; }
-    * { box-sizing: border-box; scroll-behavior: smooth; }
+        .nav-content {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-    /* Native macOS Scrollbars */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #C1C1C1; border-radius: 20px; }
-    .dark ::-webkit-scrollbar-thumb { background: #3A3A3C; }
+        .nav-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
 
-    /* ==========================================================================
-       MACOS WINDOW UI
-       ========================================================================== */
-    .mac-window {
-        position: relative; max-width: 900px; width: 100%; min-height: 90vh; max-height: 900px;
-        background: #ffffff; border-radius: 16px; margin: 20px auto;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.12); border: 1px solid rgba(255,255,255,0.6);
-        display: flex; flex-direction: row; overflow: hidden; transition: background 0.3s ease, border-color 0.3s ease;
-    }
-    .dark .mac-window { background: #1C1C1E; border: 1px solid rgba(255,255,255,0.05); }
+        .nav-actions {
+            display: flex;
+            gap: 8px;
+        }
 
-    .mac-traffic-lights { display: flex; gap: 8px; position: absolute; top: 18px; left: 20px; z-index: 50; cursor: pointer; }
-    .mac-traffic-lights div { width: 13px; height: 13px; border-radius: 50%; transition: all 0.2s ease; }
-    .tl-red { background: #FF5F56; } .tl-red:active { transform: scale(0.85); background: #e0443b; }
-    .tl-yellow { background: #FFBD2E; } .tl-yellow:active { transform: scale(0.85); background: #d69a1a; }
-    .tl-green { background: #27C93F; } .tl-green:active { transform: scale(0.85); background: #1a9a2e; }
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--ios-secondary-bg);
+            color: var(--accent);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s var(--transition-smooth);
+        }
 
-    /* ==========================================================================
-       APPLE SIDEBAR & GLASSMORPHISM
-       ========================================================================== */
-    .app-sidebar {
-        background: rgba(245, 245, 247, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        border-right: 1px solid rgba(0,0,0,0.05); width: 240px; flex-shrink: 0; padding: 60px 12px 16px;
-        display: flex; flex-direction: column; transition: background 0.3s ease, border-color 0.3s ease;
-    }
-    .dark .app-sidebar { background: rgba(20, 20, 22, 0.7); border-right: 1px solid rgba(255,255,255,0.05); }
+        .icon-btn:active {
+            transform: scale(0.92);
+            background: var(--ios-tertiary-bg);
+        }
 
-    .nav-item {
-        display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px;
-        font-size: 14px; font-weight: 500; color: #1d1d1f; cursor: pointer; transition: all 0.2s;
-    }
-    .dark .nav-item { color: #e5e5ea; }
-    .nav-item:hover { background: rgba(0,0,0,0.05); }
-    .dark .nav-item:hover { background: rgba(255,255,255,0.08); }
-    .nav-item.active { background: rgba(0, 122, 255, 0.15); color: #007AFF; }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-    /* ==========================================================================
-       MOBILE DOCK (Bottom Menu)
-       ========================================================================== */
-    .mac-dock {
-        display: none; position: sticky; bottom: 0; margin-top: auto; width: 100%; z-index: 50;
-        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-        border-top: 1px solid rgba(0,0,0,0.05); padding: 12px 16px 20px; justify-content: space-around;
-        border-radius: 16px 16px 0 0; transition: background 0.3s ease;
-    }
-    .dark .mac-dock { background: rgba(28, 28, 30, 0.85); border-top: 1px solid rgba(255,255,255,0.05); }
-    
-    .dock-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 600; color: #888; cursor: pointer; transition: all 0.2s; gap: 4px; }
-    .dark .dock-item { color: #8e8e93; }
-    .dock-item.active { color: #007AFF; }
-    .dock-item i { font-size: 20px; transition: transform 0.2s; }
-    .dock-item:active i { transform: scale(0.9); }
+        .card {
+            background: var(--ios-card);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s var(--transition-smooth);
+            border: 0.5px solid transparent;
+        }
 
-    /* ==========================================================================
-       APPLE FORMS & INPUTS
-       ========================================================================== */
-    .apple-input {
-        background: #F5F5F7; border: none; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
-        transition: box-shadow 0.2s, background 0.2s, color 0.2s; color: #1d1d1f; width: 100%; border-radius: 8px;
-    }
-    .dark .apple-input { background: #1C1C1E; color: #f5f5f7; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
-    .apple-input:focus { box-shadow: 0 0 0 3px rgba(34, 158, 217, 0.3), inset 0 1px 2px rgba(0,0,0,0.06); }
-    .dark .apple-input:focus { box-shadow: 0 0 0 3px rgba(34, 158, 217, 0.4), inset 0 0 0 1px rgba(255,255,255,0.08); }
+        .search-card {
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* Responsive Layout */
-    @media (max-width: 768px) {
-        .mac-window { flex-direction: column; max-height: none; border-radius: 0; margin: 0; height: 100vh; border: none; }
-        .app-sidebar { display: none; }
-        .mac-dock { display: flex; } 
-        .mac-traffic-lights { top: 12px; left: 16px; }
-    }
-  </style>
+        .search-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--accent), #5856D6);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 8px 24px rgba(0,122,255,0.3);
+        }
+
+        .search-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .search-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            position: relative;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 17px;
+            font-weight: 500;
+            font-family: var(--font-system);
+            background: var(--ios-tertiary-bg);
+            color: var(--text-primary);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: all 0.3s var(--transition-smooth);
+            letter-spacing: 0.5px;
+        }
+
+        .input-field input:focus {
+            border-color: var(--accent);
+            background: var(--ios-card);
+            box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
+        }
+
+        .input-field input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .btn {
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: var(--font-system);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,122,255,0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0,122,255,0.4);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-ghost {
+            background: var(--ios-secondary-bg);
+            color: var(--text-primary);
+        }
+
+        .btn-small {
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: var(--radius-sm);
+        }
+
+        .result-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--green-accent);
+            border-radius: var(--radius-lg);
+            color: white;
+            box-shadow: 0 8px 24px rgba(52,199,89,0.3);
+            animation: slideDown 0.5s var(--transition-spring);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .result-banner.error {
+            background: var(--red-accent);
+            box-shadow: 0 8px 24px rgba(255,59,48,0.3);
+        }
+
+        .result-icon {
+            font-size: 28px;
+        }
+
+        .result-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .result-highlight {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .room-card {
+            animation: fadeInUp 0.6s var(--transition-spring);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 0.5px solid var(--separator);
+        }
+
+        .room-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .room-badge {
+            background: var(--green-accent);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .blackboard {
+            background: var(--ios-secondary-bg);
+            border-radius: var(--radius-sm);
+            padding: 12px 24px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .seat-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .seat-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .seat {
+            aspect-ratio: 1;
+            background: var(--ios-tertiary-bg);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: all 0.4s var(--transition-spring);
+            position: relative;
+            cursor: default;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .seat.highlight {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(0,122,255,0.5);
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 8px 24px rgba(0,122,255,0.5); }
+            50% { box-shadow: 0 12px 32px rgba(0,122,255,0.7); }
+        }
+
+        .seat.highlight::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 20px;
+            height: 20px;
+            background: var(--red-accent);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(255,59,48,0.4);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .seat-placeholder {
+            aspect-ratio: 1;
+            visibility: hidden;
+        }
+
+        .legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 0.5px solid var(--separator);
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-dot.available {
+            background: var(--ios-tertiary-bg);
+        }
+
+        .legend-dot.selected {
+            background: var(--accent);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .quick-actions .btn {
+            flex: 1;
+        }
+
+        .history-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--ios-tertiary-bg);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s var(--transition-smooth);
+        }
+
+        .history-item:active {
+            transform: scale(0.98);
+            background: var(--ios-secondary-bg);
+        }
+
+        .history-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-seat {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--accent);
+        }
+
+        .history-details {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .history-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .app-footer {
+            text-align: center;
+            padding: 16px 8px 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .app-footer span.author {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--ios-card);
+            color: var(--text-primary);
+            padding: 14px 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 1000;
+            transition: transform 0.4s var(--transition-spring);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+
+        @media (max-width: 380px) {
+            .input-wrapper {
+                flex-direction: column;
+            }
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+            .seat {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
-<body class="flex items-center justify-center p-0 md:p-6">
+<body>
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <div class="nav-title">📋 បាក់ឌុប 2026</div>
+            <div class="nav-actions">
+                <button class="icon-btn" onclick="toggleTheme()" title="ផ្លាស់ប្ដូររចនាបទ">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="icon-btn" onclick="shareResult()" title="ចែករំលែក">
+                    <i class="fa-solid fa-share-nodes"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-  <div class="mac-window">
+    <div class="container">
+        <div class="card search-card">
+            <div class="search-icon">
+                <i class="fa-solid fa-magnifying-glass-location"></i>
+            </div>
+            <h2 class="search-title">ស្វែងរកទីតាំងប្រឡង</h2>
+            <p class="search-subtitle">បញ្ចូលលេខរៀងបេក្ខជនសរុបដើម្បីស្វែងរកទីតាំង</p>
+            
+            <div class="input-wrapper">
+                <div class="input-field">
+                    <input 
+                        type="number" 
+                        id="globalSeatNumber" 
+                        placeholder="បញ្ចូលលេខរៀង (ឧ. ២៧)" 
+                        min="1" 
+                        max="1000"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        onkeypress="handleEnter(event)"
+                        oninput="handleInputChange()"
+                    >
+                </div>
+                <button class="btn btn-primary" onclick="calculateAndFindSeat()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    ស្វែងរក
+                </button>
+            </div>
 
-    <!-- Traffic Lights -->
-    <div class="mac-traffic-lights">
-        <div class="tl-red" title="Close"></div>
-        <div class="tl-yellow" title="Minimize"></div>
-        <div class="tl-green" title="Maximize"></div>
+            <div class="quick-actions">
+                <button class="btn btn-ghost btn-small" onclick="randomSeat()">
+                    <i class="fa-solid fa-shuffle"></i>
+                    ចៃដន្យ
+                </button>
+                <button class="btn btn-ghost btn-small" onclick="clearAll()">
+                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                    សម្អាត
+                </button>
+            </div>
+        </div>
+
+        <div class="result-banner" id="resultBanner" style="display: none;">
+            <div class="result-icon" id="resultIcon">✅</div>
+            <div class="result-text" id="resultMessage"></div>
+        </div>
+
+        <div class="card room-card" id="roomContainer" style="display: none;">
+            <div class="room-header">
+                <div class="room-info">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    <span>ច្រកចូល</span>
+                </div>
+                <div class="room-badge" id="roomNumberDisplay">បន្ទប់ទី ១</div>
+            </div>
+
+            <div class="blackboard">
+                <i class="fa-solid fa-chalkboard"></i>
+                ក្តារខៀន
+            </div>
+
+            <div class="seat-grid" id="seatGrid"></div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot available"></div>
+                    <span>ទំនេរ</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot selected"></div>
+                    <span>ទីតាំងរបស់អ្នក</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card history-card">
+            <div class="history-header">
+                <h3 style="font-size: 17px; font-weight: 600;">
+                    <i class="fa-solid fa-clock-rotate-left" style="color: var(--accent);"></i>
+                    ប្រវត្តិស្វែងរក
+                </h3>
+                <button class="btn btn-ghost btn-small" onclick="clearHistory()">
+                    <i class="fa-solid fa-trash-can"></i>
+                    លុបទាំងអស់
+                </button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-state">
+                    <i class="fa-solid fa-inbox"></i>
+                    <p>មិនទាន់មានប្រវត្តិស្វែងរក</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <span>អភិវឌ្ឍន៍ដោយ</span>
+            <span class="author">Sochhat Rotha</span>
+        </footer>
     </div>
 
-    <!-- Desktop Sidebar -->
-    <aside class="app-sidebar">
-      <div class="flex items-center gap-3 mb-8 px-2 mt-8">
-        <!-- SR Text Logo -->
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#007AFF] to-[#5856D6] text-white flex items-center justify-center font-bold shadow-md text-lg border border-white/20">
-          SR
-        </div>
-        <div>
-          <!-- FIX: Added text-gray-800 so the name is visible in Light Mode -->
-          <div class="font-bold text-sm tracking-tight text-gray-800 dark:text-white transition-colors duration-300">Sochhat Rotha</div>
-          <div class="text-[10px] text-gray-500 dark:text-gray-400 transition-colors duration-300">Personal Links</div>
-        </div>
-      </div>
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMessage"></span>
+    </div>
 
-      <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider px-2 mb-2 font-semibold">Menu</div>
-      <div class="nav-item active" onclick="scrollToSection('hero-section')"><i class="w-5 text-[#007AFF] fa-solid fa-link"></i> My Links</div>
-      <div class="nav-item" onclick="scrollToSection('services-section')"><i class="w-5 text-[#34C759] fa-solid fa-rocket"></i> Services</div>
-      <div class="nav-item" onclick="scrollToSection('contact-section')"><i class="w-5 text-[#FF3B30] fa-solid fa-paper-plane"></i> Contact Me</div>
+    <script>
+        const SEATS_PER_ROOM = 25;
+        const MAX_HISTORY = 10;
+        const STORAGE_KEY = 'exam_seat_history';
+        const THEME_KEY = 'exam_seat_theme';
 
-      <div class="mt-auto pt-4 border-t border-gray-200/60 dark:border-white/5 w-full transition-colors duration-300">
-        <div class="px-2 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-          <i class="fa-solid fa-circle text-[#34C759] text-[8px]"></i> System Online
-        </div>
-      </div>
-    </aside>
+        const SEAT_LAYOUT = [
+            [6, 7, 18, 19],
+            [5, 8, 17, 20],
+            [4, 9, 16, 21],
+            [3, 10, 15, 22],
+            [2, 11, 14, 23],
+            [1, 12, 13, 24],
+            [null, null, null, 25]
+        ];
 
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden relative w-full bg-[#F5F5F7] dark:bg-[#000000] transition-colors duration-300">
+        let currentResult = null;
+        let searchHistory = [];
 
-      <!-- Header -->
-      <div class="pt-14 px-4 md:px-8 pb-4 flex justify-between items-center bg-[#F5F5F7] dark:bg-[#000000] z-20 transition-colors duration-300">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight transition-colors duration-300">Profile</h1>
-          <span class="text-xs text-gray-500 dark:text-gray-400 block transition-colors duration-300">Connect with me on social media</span>
-        </div>
-        
-        <!-- FIX: Improved Dark Mode Button Contrast (bg-[#2C2C2E] in dark mode) -->
-        <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-90 cursor-pointer outline-none">
-            <i id="theme-icon" class="fa-solid fa-moon text-indigo-500 text-lg"></i>
-        </button>
-      </div>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHistory();
+            loadTheme();
+            renderHistory();
+            generateSeatGrid();
+            setTimeout(() => {
+                document.getElementById('globalSeatNumber').focus();
+            }, 500);
+        });
 
-      <!-- Scrollable Content Area -->
-      <div class="flex-1 overflow-y-auto px-4 md:px-8 pb-6 space-y-6 relative">
+        function generateSeatGrid() {
+            const grid = document.getElementById('seatGrid');
+            grid.innerHTML = '';
 
-        <!-- Hero Banner -->
-        <div id="hero-section" class="w-full rounded-2xl bg-gradient-to-r from-[#007AFF] to-[#5856D6] relative overflow-hidden shadow-md text-white p-6 md:p-8 transform transition hover:scale-[1.01]">
-          <div class="z-10 relative flex flex-col gap-2">
-            <h2 class="text-2xl md:text-3xl font-bold leading-tight flex items-center gap-3">
-              Hi, I'm Sochhat Rotha 👋
-              <span class="relative flex h-3 w-3">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 border border-white"></span>
-              </span>
-            </h2>
-            <p class="text-blue-100 text-sm opacity-90 max-w-[280px] md:max-w-none">
-               Find all my official links and services below!
-            </p>
-          </div>
-          <i class="fa-solid fa-user-astronaut absolute right-[-20px] bottom-[-20px] text-[120px] md:text-[150px] text-white opacity-10"></i>
-        </div>
+            SEAT_LAYOUT.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'seat-row';
 
-        <!-- Official Links 2x2 Grid -->
-        <div>
-          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 transition-colors duration-300">Official Links</h3>
-          <div class="grid grid-cols-2 gap-4">
+                row.forEach(seatNumber => {
+                    if (seatNumber !== null) {
+                        const seatDiv = document.createElement('div');
+                        seatDiv.className = 'seat';
+                        seatDiv.id = `seat-${seatNumber}`;
+                        seatDiv.textContent = seatNumber;
+                        seatDiv.onclick = () => seatClickHandler(seatNumber);
+                        rowDiv.appendChild(seatDiv);
+                    } else {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'seat-placeholder';
+                        rowDiv.appendChild(placeholder);
+                    }
+                });
+
+                grid.appendChild(rowDiv);
+            });
+        }
+
+        function seatClickHandler(seatNumber) {
+            if (currentResult && currentResult.localSeat === seatNumber) {
+                showToast(`នេះជាតុលេខ ${seatNumber} របស់អ្នក`, 'success');
+            } else {
+                showToast(`តុលេខ ${seatNumber} - មិនមែនជាទីតាំងរបស់អ្នក`, 'error');
+                const seatEl = document.getElementById(`seat-${seatNumber}`);
+                if (seatEl) {
+                    seatEl.style.background = 'var(--orange-accent)';
+                    seatEl.style.color = 'white';
+                    setTimeout(() => {
+                        if (!seatEl.classList.contains('highlight')) {
+                            seatEl.style.background = '';
+                            seatEl.style.color = '';
+                        }
+                    }, 600);
+                }
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                calculateAndFindSeat();
+            }
+        }
+
+        function handleInputChange() {
+            const input = document.getElementById('globalSeatNumber');
+            const value = parseInt(input.value);
+            if (value > 1000) {
+                input.value = 1000;
+                showToast('លេខរៀងអតិបរមាគឺ 1000', 'error');
+            }
+        }
+
+        function calculateAndFindSeat() {
+            const inputEl = document.getElementById('globalSeatNumber');
+            const inputVal = inputEl.value.trim();
+            const globalSeat = parseInt(inputVal);
+            const resultBanner = document.getElementById('resultBanner');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultIcon = document.getElementById('resultIcon');
+            const roomContainer = document.getElementById('roomContainer');
+
+            document.querySelectorAll('.seat.highlight').forEach(seat => {
+                seat.classList.remove('highlight');
+            });
+
+            if (isNaN(globalSeat) || globalSeat <= 0 || globalSeat > 1000) {
+                resultBanner.style.display = 'flex';
+                resultBanner.className = 'result-banner error';
+                resultIcon.textContent = '❌';
+                resultMessage.innerHTML = 'សូមបញ្ចូលលេខរៀងឲ្យបានត្រឹមត្រូវ';
+                roomContainer.style.display = 'none';
+                
+                inputEl.style.animation = 'none';
+                inputEl.offsetHeight;
+                inputEl.style.animation = 'shake 0.5s ease';
+                return;
+            }
+
+            const roomNumber = Math.ceil(globalSeat / SEATS_PER_ROOM);
+            let localSeat = globalSeat % SEATS_PER_ROOM;
+            if (localSeat === 0) localSeat = SEATS_PER_ROOM;
+
+            currentResult = {
+                globalSeat,
+                roomNumber,
+                localSeat,
+                timestamp: new Date().toISOString()
+            };
+
+            resultBanner.style.display = 'flex';
+            resultBanner.className = 'result-banner';
+            resultIcon.textContent = '✅';
+            resultMessage.innerHTML = `បន្ទប់ទី <span class="result-highlight">${roomNumber}</span> • តុលេខ <span class="result-highlight">${localSeat}</span>`;
+
+            document.getElementById('roomNumberDisplay').textContent = `បន្ទប់ទី ${roomNumber}`;
+            roomContainer.style.display = 'block';
             
-            <a href="https://www.facebook.com/share/1FEAEKGchk/" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#1877F2] text-white flex flex-col items-center justify-center p-4 text-center">
-              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
-              <i class="fa-brands fa-facebook text-3xl mb-2 z-10 drop-shadow-sm"></i>
-              <span class="font-bold text-sm drop-shadow-md z-10">Facebook</span>
-              <span class="text-[10px] opacity-80 z-10">Follow me</span>
-              <i class="fa-brands fa-facebook absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
-            </a>
+            setTimeout(() => {
+                roomContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
 
-            <a href="#" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#000000] dark:bg-[#1C1C1E] dark:border dark:border-white/10 text-white flex flex-col items-center justify-center p-4 text-center border border-gray-800 transition-colors duration-300">
-              <div class="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition"></div>
-              <i class="fa-brands fa-tiktok text-3xl mb-2 z-10 drop-shadow-sm"></i>
-              <span class="font-bold text-sm drop-shadow-md z-10">TikTok</span>
-              <span class="text-[10px] opacity-80 z-10">Watch videos</span>
-              <i class="fa-brands fa-tiktok absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
-            </a>
+            setTimeout(() => {
+                const seatElement = document.getElementById(`seat-${localSeat}`);
+                if (seatElement) {
+                    seatElement.classList.add('highlight');
+                }
+            }, 300);
 
-            <a href="https://t.me/sochhat_rotha" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-[#229ED9] text-white flex flex-col items-center justify-center p-4 text-center">
-              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
-              <i class="fa-brands fa-telegram text-3xl mb-2 z-10 drop-shadow-sm"></i>
-              <span class="font-bold text-sm drop-shadow-md z-10">Telegram</span>
-              <span class="text-[10px] opacity-80 z-10">Message me</span>
-              <i class="fa-brands fa-telegram absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
-            </a>
+            addToHistory(currentResult);
+            renderHistory();
+            inputEl.blur();
+        }
 
-            <a href="https://www.instagram.com/rotha_79?igsh=MXdlcXFxeDZ2NnhveQ==" target="_blank" class="group relative h-32 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1 bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] text-white flex flex-col items-center justify-center p-4 text-center">
-              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
-              <i class="fa-brands fa-instagram text-3xl mb-2 z-10 drop-shadow-sm"></i>
-              <span class="font-bold text-sm drop-shadow-md z-10">Instagram</span>
-              <span class="text-[10px] opacity-80 z-10">View photos</span>
-              <i class="fa-brands fa-instagram absolute -right-3 -bottom-3 text-6xl opacity-20 group-hover:scale-110 transition-transform duration-300"></i>
-            </a>
-          </div>
-        </div>
+        function randomSeat() {
+            const randomNum = Math.floor(Math.random() * 1000) + 1;
+            document.getElementById('globalSeatNumber').value = randomNum;
+            calculateAndFindSeat();
+        }
 
-        <!-- SERVICES SECTION -->
-        <div id="services-section" class="mt-6">
-          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 transition-colors duration-300">My Services & Bots</h3>
-          <div class="flex flex-col gap-3">
+        function clearAll() {
+            document.getElementById('globalSeatNumber').value = '';
+            document.getElementById('resultBanner').style.display = 'none';
+            document.getElementById('roomContainer').style.display = 'none';
+            document.querySelectorAll('.seat.highlight').forEach(seat => {
+                seat.classList.remove('highlight');
+            });
+            currentResult = null;
+            document.getElementById('globalSeatNumber').focus();
+            showToast('បានសម្អាតរួចរាល់', 'success');
+        }
+
+        async function shareResult() {
+            if (!currentResult) {
+                showToast('សូមស្វែងរកទីតាំងជាមុនសិន', 'error');
+                return;
+            }
+
+            const shareText = `ទីតាំងប្រឡងរបស់ខ្ញុំ៖ បន្ទប់ទី ${currentResult.roomNumber} តុលេខ ${currentResult.localSeat}`;
             
-            <a href="https://t.me/Primerinox" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-[#229ED9]/10 flex items-center justify-center text-[#229ED9]"><i class="fa-brands fa-telegram text-xl"></i></div>
-                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#007AFF] transition-colors">Sell Channel</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@Primerinox</p></div>
-              </div>
-              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-[#007AFF] transition-all"></i>
-            </a>
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'ទីតាំងប្រឡង',
+                        text: shareText,
+                    });
+                } catch (err) {
+                    copyToClipboard(shareText);
+                }
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
 
-            <a href="https://t.me/mainrinox" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-[#229ED9]/10 flex items-center justify-center text-[#229ED9]"><i class="fa-solid fa-bullhorn text-lg"></i></div>
-                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#007AFF] transition-colors">Main Channel</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@mainrinox</p></div>
-              </div>
-              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-[#007AFF] transition-all"></i>
-            </a>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('បានចម្លងទៅក្ដារតម្បៀតខ្ទាស់', 'success');
+            }).catch(() => {
+                showToast('មិនអាចចម្លងបានទេ', 'error');
+            });
+        }
 
-            <a href="https://t.me/Krypt3nite" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-green-50 dark:bg-[#34C759]/10 flex items-center justify-center text-green-500"><i class="fa-solid fa-headset text-lg"></i></div>
-                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-green-500 transition-colors">Support</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@Krypt3nite</p></div>
-              </div>
-              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-green-500 transition-all"></i>
-            </a>
+        function addToHistory(result) {
+            searchHistory = searchHistory.filter(h => h.globalSeat !== result.globalSeat);
+            searchHistory.unshift(result);
+            if (searchHistory.length > MAX_HISTORY) {
+                searchHistory = searchHistory.slice(0, MAX_HISTORY);
+            }
+            saveHistory();
+        }
 
-            <a href="https://t.me/rinox3autobot" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-purple-50 dark:bg-[#AF52DE]/10 flex items-center justify-center text-purple-500"><i class="fa-solid fa-robot text-lg"></i></div>
-                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-purple-500 transition-colors">Telegram Auto Bot</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@rinox3autobot</p></div>
-              </div>
-              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-purple-500 transition-all"></i>
-            </a>
+        function loadHistory() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                searchHistory = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                searchHistory = [];
+            }
+        }
 
-            <a href="https://www.youtube.com/@Primerinox1" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-red-50 dark:bg-[#FF3B30]/10 flex items-center justify-center text-[#FF3B30]"><i class="fa-brands fa-youtube text-xl"></i></div>
-                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#FF3B30] transition-colors">Tutorial VDO</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">YouTube Channel</p></div>
-              </div>
-              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-[#FF3B30] transition-all"></i>
-            </a>
+        function saveHistory() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(searchHistory));
+            } catch (e) {
+                showToast('ទំហំផ្ទុកពេញ', 'error');
+            }
+        }
 
-            <a href="https://t.me/Fontcov3terbot" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-orange-50 dark:bg-[#FF9500]/10 flex items-center justify-center text-[#FF9500]"><i class="fa-solid fa-font text-lg"></i></div>
-                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-[#FF9500] transition-colors">Free Font Generator Bot</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@Fontcov3terbot</p></div>
-              </div>
-              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-[#FF9500] transition-all"></i>
-            </a>
+        function clearHistory() {
+            searchHistory = [];
+            saveHistory();
+            renderHistory();
+            showToast('បានលុបប្រវត្តិទាំងអស់', 'success');
+        }
 
-            <a href="https://t.me/Rotha_Downloader_bot" target="_blank" class="group flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-white/5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-indigo-50 dark:bg-[#5856D6]/10 flex items-center justify-center text-indigo-500"><i class="fa-solid fa-download text-lg"></i></div>
-                <div><h4 class="font-bold text-sm text-gray-800 dark:text-gray-100 group-hover:text-indigo-500 transition-colors">Free Download Bot</h4><p class="text-[10px] text-gray-500 dark:text-gray-400">@Rotha_Downloader_bot</p></div>
-              </div>
-              <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 group-hover:translate-x-1 group-hover:text-indigo-500 transition-all"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- DIRECT TELEGRAM CHAT CARD -->
-        <div id="contact-section" class="mt-8 pt-4 pb-4">
-          <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 transition-colors duration-300">Contact Me</h3>
-          
-          <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm relative overflow-hidden transition-colors duration-300">
-            <!-- Background Icon Decoration -->
-            <i class="fa-brands fa-telegram absolute -right-10 -bottom-10 text-[150px] text-[#229ED9] opacity-5 dark:opacity-10 pointer-events-none"></i>
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
             
-            <form onsubmit="sendToTelegram(event)" class="flex flex-col gap-4 relative z-10">
-              <div>
-                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5 ml-1 transition-colors duration-300">Name</label>
-                <input type="text" id="tg-name" class="apple-input px-4 py-3 text-sm" placeholder="Your Name" required>
-              </div>
+            if (searchHistory.length === 0) {
+                historyList.innerHTML = `<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>មិនទាន់មានប្រវត្តិស្វែងរក</p></div>`;
+                return;
+            }
 
-              <div>
-                <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5 ml-1 transition-colors duration-300">Message</label>
-                <textarea id="tg-message" class="apple-input px-4 py-3 text-sm resize-none" rows="4" placeholder="How can I help you?" required></textarea>
-              </div>
+            historyList.innerHTML = searchHistory.map((h, index) => {
+                const time = new Date(h.timestamp);
+                const timeStr = formatTime(time);
+                
+                return `<div class="history-item" onclick="loadHistoryItem(${index})">
+                    <div class="history-info">
+                        <span class="history-seat">#${h.globalSeat}</span>
+                        <span class="history-details">បន្ទប់ទី ${h.roomNumber} • តុលេខ ${h.localSeat}</span>
+                    </div>
+                    <span class="history-time">${timeStr}</span>
+                </div>`;
+            }).join('');
+        }
 
-              <div class="mt-2 flex justify-end">
-                <button type="submit" class="bg-[#229ED9] hover:bg-[#1e88bb] active:scale-95 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:shadow-lg flex items-center gap-2 outline-none">
-                  <i class="fa-solid fa-paper-plane text-xs"></i> Send via Telegram
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        function loadHistoryItem(index) {
+            const item = searchHistory[index];
+            if (item) {
+                document.getElementById('globalSeatNumber').value = item.globalSeat;
+                calculateAndFindSeat();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
 
-      </div>
+        function formatTime(date) {
+            const now = new Date();
+            const diff = now - date;
+            if (diff < 60000) return 'ទើបតែពេលនេះ';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)} នាទីមុន`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)} ម៉ោងមុន`;
+            return date.toLocaleDateString('km-KH', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
 
-      <!-- Mobile Bottom Dock -->
-      <nav class="mac-dock">
-        <div class="dock-item active" onclick="scrollToSection('hero-section')">
-          <i class="fa-solid fa-link"></i>
-          <span>Links</span>
-        </div>
-        <div class="dock-item" onclick="scrollToSection('services-section')">
-          <i class="fa-solid fa-rocket"></i>
-          <span>Services</span>
-        </div>
-        <div class="dock-item" onclick="scrollToSection('contact-section')">
-          <i class="fa-solid fa-paper-plane text-[#FF3B30]"></i>
-          <span>Chat</span>
-        </div>
-      </nav>
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('i');
+            
+            clearTimeout(window.toastTimeout);
+            toastMessage.textContent = message;
+            
+            if (type === 'success') {
+                toastIcon.className = 'fa-solid fa-circle-check';
+                toastIcon.style.color = 'var(--green-accent)';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-exclamation';
+                toastIcon.style.color = 'var(--red-accent)';
+            }
+            
+            toast.classList.add('show');
+            window.toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
 
-    </main>
-  </div>
+        function toggleTheme() {
+            const isDark = document.documentElement.style.colorScheme === 'dark';
+            document.documentElement.style.colorScheme = isDark ? 'light' : 'dark';
+            try { localStorage.setItem(THEME_KEY, isDark ? 'light' : 'dark'); } catch(e) {}
+            showToast(isDark ? 'ប្ដូរទៅ Light Mode' : 'ប្ដូរទៅ Dark Mode', 'success');
+        }
+
+        function loadTheme() {
+            try {
+                const saved = localStorage.getItem(THEME_KEY);
+                if (saved) document.documentElement.style.colorScheme = saved;
+            } catch(e) {}
+        }
+    </script>
 </body>
 </html>
