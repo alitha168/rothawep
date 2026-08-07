@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>បាក់ឌុប 2026 - ស្វែងរកទីតាំងប្រឡង</title>
+    <title>ប្រព័ន្ធប្រឡង & កម្មវិធីកំណត់ម៉ោង</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -30,7 +30,6 @@
             --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Khmer OS Battambang', sans-serif;
             --transition-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
             --transition-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -63,11 +62,41 @@
             background-color: var(--ios-bg);
             color: var(--text-primary);
             min-height: 100vh;
-            min-height: -webkit-fill-available;
-            padding: env(safe-area-inset-top, 20px) 16px env(safe-area-inset-bottom, 20px);
+            padding: env(safe-area-inset-top, 16px) 16px env(safe-area-inset-bottom, 16px);
             overflow-x: hidden;
         }
 
+        /* Status Bar Time Display */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            max-width: 500px;
+            margin: 0 auto 8px;
+        }
+
+        .status-time {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.5px;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .status-icons i {
+            font-size: 14px;
+        }
+
+        /* Navigation Bar */
         .nav-bar {
             position: sticky;
             top: 0;
@@ -75,8 +104,8 @@
             background: var(--ios-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 12px 8px;
-            margin: -20px -16px 20px;
+            padding: 8px 8px;
+            margin: 0 -16px 16px;
             border-bottom: 0.5px solid var(--separator);
         }
 
@@ -127,6 +156,7 @@
             gap: 20px;
         }
 
+        /* Card Styles */
         .card {
             background: var(--ios-card);
             border-radius: var(--radius-xl);
@@ -136,6 +166,145 @@
             border: 0.5px solid transparent;
         }
 
+        /* Countdown Card */
+        .countdown-card {
+            text-align: center;
+            background: linear-gradient(145deg, var(--ios-card) 0%, var(--ios-card) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,122,255,0.03) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .countdown-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #FF9500, #FF5E3A);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(255,149,0,0.25);
+            position: relative;
+            z-index: 1;
+        }
+
+        .countdown-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .countdown-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .target-date {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+            background: rgba(0,122,255,0.08);
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .countdown-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .time-box {
+            flex: 1;
+            background: var(--ios-tertiary-bg);
+            border-radius: var(--radius-md);
+            padding: 14px 4px;
+            transition: transform 0.2s var(--transition-smooth);
+        }
+
+        .time-box:hover {
+            transform: translateY(-2px);
+        }
+
+        .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+        }
+
+        .label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            height: 6px;
+            background: var(--ios-tertiary-bg);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FF9500, #FF5E3A);
+            border-radius: 3px;
+            transition: width 1s linear;
+            box-shadow: 0 0 8px rgba(255,149,0,0.3);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Search Card */
         .search-card {
             text-align: center;
             position: relative;
@@ -143,28 +312,28 @@
         }
 
         .search-icon {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, var(--accent), #5856D6);
-            border-radius: 20px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 28px;
+            margin: 0 auto 12px;
+            font-size: 24px;
             color: white;
-            box-shadow: 0 8px 24px rgba(0,122,255,0.3);
+            box-shadow: 0 8px 20px rgba(0,122,255,0.25);
         }
 
         .search-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: 4px;
             letter-spacing: -0.3px;
         }
 
         .search-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
             margin-bottom: 20px;
         }
@@ -182,7 +351,7 @@
 
         .input-field input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 14px 18px;
             font-size: 17px;
             font-weight: 500;
             font-family: var(--font-system);
@@ -206,7 +375,7 @@
         }
 
         .btn {
-            padding: 16px 24px;
+            padding: 14px 22px;
             font-size: 16px;
             font-weight: 600;
             font-family: var(--font-system);
@@ -227,12 +396,6 @@
             box-shadow: 0 4px 12px rgba(0,122,255,0.3);
         }
 
-        .btn-primary:hover {
-            background: var(--accent-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(0,122,255,0.4);
-        }
-
         .btn-primary:active {
             transform: scale(0.96);
         }
@@ -248,70 +411,70 @@
             border-radius: var(--radius-sm);
         }
 
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .quick-actions .btn {
+            flex: 1;
+        }
+
+        /* Result Banner */
         .result-banner {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 16px;
+            padding: 14px 16px;
             background: var(--green-accent);
             border-radius: var(--radius-lg);
             color: white;
-            box-shadow: 0 8px 24px rgba(52,199,89,0.3);
+            box-shadow: 0 8px 20px rgba(52,199,89,0.25);
             animation: slideDown 0.5s var(--transition-spring);
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .result-banner.error {
             background: var(--red-accent);
-            box-shadow: 0 8px 24px rgba(255,59,48,0.3);
+            box-shadow: 0 8px 20px rgba(255,59,48,0.25);
         }
 
         .result-icon {
-            font-size: 28px;
+            font-size: 24px;
         }
 
         .result-text {
             flex: 1;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
         }
 
         .result-highlight {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
         }
 
+        /* Room Card */
         .room-card {
             animation: fadeInUp 0.6s var(--transition-spring);
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .room-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
             border-bottom: 0.5px solid var(--separator);
         }
 
@@ -336,12 +499,12 @@
         .blackboard {
             background: var(--ios-secondary-bg);
             border-radius: var(--radius-sm);
-            padding: 12px 24px;
+            padding: 10px 20px;
             text-align: center;
             font-weight: 600;
             font-size: 14px;
             color: var(--text-secondary);
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -351,13 +514,13 @@
         .seat-grid {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .seat-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .seat {
@@ -367,7 +530,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-secondary);
             transition: all 0.4s var(--transition-spring);
@@ -396,8 +559,8 @@
             position: absolute;
             top: -6px;
             right: -6px;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             background: var(--red-accent);
             border-radius: 50%;
             border: 3px solid white;
@@ -418,8 +581,8 @@
         .legend {
             display: flex;
             gap: 16px;
-            margin-top: 20px;
-            padding-top: 16px;
+            margin-top: 16px;
+            padding-top: 14px;
             border-top: 0.5px solid var(--separator);
             justify-content: center;
         }
@@ -439,24 +602,10 @@
             border-radius: 3px;
         }
 
-        .legend-dot.available {
-            background: var(--ios-tertiary-bg);
-        }
+        .legend-dot.available { background: var(--ios-tertiary-bg); }
+        .legend-dot.selected { background: var(--accent); }
 
-        .legend-dot.selected {
-            background: var(--accent);
-        }
-
-        .quick-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .quick-actions .btn {
-            flex: 1;
-        }
-
+        /* History Card */
         .history-card {
             display: flex;
             flex-direction: column;
@@ -499,7 +648,7 @@
 
         .history-seat {
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
             color: var(--accent);
         }
 
@@ -525,25 +674,7 @@
             opacity: 0.5;
         }
 
-        .app-footer {
-            text-align: center;
-            padding: 16px 8px 8px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            opacity: 0.85;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .app-footer span.author {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
+        /* Toast */
         .toast {
             position: fixed;
             bottom: 32px;
@@ -568,6 +699,16 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* Footer Time */
+        .footer-time {
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            padding: 8px 0;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
@@ -575,25 +716,31 @@
         }
 
         @media (max-width: 380px) {
-            .input-wrapper {
-                flex-direction: column;
-            }
-            .btn-primary {
-                width: 100%;
-                justify-content: center;
-            }
-            .seat {
-                font-size: 14px;
-            }
+            .input-wrapper { flex-direction: column; }
+            .btn-primary { width: 100%; justify-content: center; }
+            .seat { font-size: 13px; }
+            .number { font-size: 26px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Status Bar with Real-Time Clock -->
+    <div class="status-bar">
+        <span class="status-time" id="statusTime">9:41</span>
+        <span class="status-icons">
+            <i class="fa-solid fa-signal"></i>
+            <i class="fa-solid fa-wifi"></i>
+            <i class="fa-solid fa-battery-full"></i>
+        </span>
+    </div>
+
+    <!-- Navigation Bar -->
     <nav class="nav-bar">
         <div class="nav-content">
-            <div class="nav-title">📋 បាក់ឌុប 2026</div>
+            <div class="nav-title">📋 ប្រព័ន្ធប្រឡង</div>
             <div class="nav-actions">
-                <button class="icon-btn" onclick="toggleTheme()" title="ផ្លាស់ប្ដូររចនាបទ">
+                <button class="icon-btn" onclick="toggleTheme()" title="ប្ដូររចនាបទ">
                     <i class="fa-solid fa-moon"></i>
                 </button>
                 <button class="icon-btn" onclick="shareResult()" title="ចែករំលែក">
@@ -604,23 +751,60 @@
     </nav>
 
     <div class="container">
+        <!-- Countdown Card -->
+        <div class="card countdown-card">
+            <div class="countdown-icon">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <h2 class="countdown-title">BCall Duration</h2>
+            <p class="countdown-subtitle">ពេលវេលានៅសល់រហូតដល់ថ្ងៃទី ១០</p>
+            <div class="target-date" id="targetDateDisplay">ថ្ងៃទី 10 ខែសីហា 2026</div>
+
+            <div class="countdown-wrapper">
+                <div class="time-box">
+                    <span class="number" id="days">00</span>
+                    <span class="label">ថ្ងៃ</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="hours">00</span>
+                    <span class="label">ម៉ោង</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="minutes">00</span>
+                    <span class="label">នាទី</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="seconds">00</span>
+                    <span class="label">វិនាទី</span>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progress"></div>
+            </div>
+            <div class="progress-label">
+                <span>ចាប់ផ្ដើម</span>
+                <span id="progressPercent">100%</span>
+                <span>បញ្ចប់</span>
+            </div>
+        </div>
+
+        <!-- Search Card -->
         <div class="card search-card">
             <div class="search-icon">
                 <i class="fa-solid fa-magnifying-glass-location"></i>
             </div>
             <h2 class="search-title">ស្វែងរកទីតាំងប្រឡង</h2>
-            <p class="search-subtitle">បញ្ចូលលេខរៀងបេក្ខជនសរុបដើម្បីស្វែងរកទីតាំង</p>
+            <p class="search-subtitle">បញ្ចូលលេខរៀងបេក្ខជនសរុប</p>
             
             <div class="input-wrapper">
                 <div class="input-field">
                     <input 
                         type="number" 
                         id="globalSeatNumber" 
-                        placeholder="បញ្ចូលលេខរៀង (ឧ. ២៧)" 
-                        min="1" 
-                        max="1000"
-                        inputmode="numeric"
-                        pattern="[0-9]*"
+                        placeholder="លេខរៀង (ឧ. ២៧)" 
+                        min="1" max="1000"
+                        inputmode="numeric" pattern="[0-9]*"
                         onkeypress="handleEnter(event)"
                         oninput="handleInputChange()"
                     >
@@ -633,21 +817,21 @@
 
             <div class="quick-actions">
                 <button class="btn btn-ghost btn-small" onclick="randomSeat()">
-                    <i class="fa-solid fa-shuffle"></i>
-                    ចៃដន្យ
+                    <i class="fa-solid fa-shuffle"></i> ចៃដន្យ
                 </button>
                 <button class="btn btn-ghost btn-small" onclick="clearAll()">
-                    <i class="fa-solid fa-arrow-rotate-left"></i>
-                    សម្អាត
+                    <i class="fa-solid fa-arrow-rotate-left"></i> សម្អាត
                 </button>
             </div>
         </div>
 
+        <!-- Result Banner -->
         <div class="result-banner" id="resultBanner" style="display: none;">
             <div class="result-icon" id="resultIcon">✅</div>
             <div class="result-text" id="resultMessage"></div>
         </div>
 
+        <!-- Room Card -->
         <div class="card room-card" id="roomContainer" style="display: none;">
             <div class="room-header">
                 <div class="room-info">
@@ -656,14 +840,10 @@
                 </div>
                 <div class="room-badge" id="roomNumberDisplay">បន្ទប់ទី ១</div>
             </div>
-
             <div class="blackboard">
-                <i class="fa-solid fa-chalkboard"></i>
-                ក្តារខៀន
+                <i class="fa-solid fa-chalkboard"></i> ក្តារខៀន
             </div>
-
             <div class="seat-grid" id="seatGrid"></div>
-
             <div class="legend">
                 <div class="legend-item">
                     <div class="legend-dot available"></div>
@@ -671,11 +851,12 @@
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot selected"></div>
-                    <span>ទីតាំងរបស់អ្នក</span>
+                    <span>ទីតាំងអ្នក</span>
                 </div>
             </div>
         </div>
 
+        <!-- History Card -->
         <div class="card history-card">
             <div class="history-header">
                 <h3 style="font-size: 17px; font-weight: 600;">
@@ -683,8 +864,7 @@
                     ប្រវត្តិស្វែងរក
                 </h3>
                 <button class="btn btn-ghost btn-small" onclick="clearHistory()">
-                    <i class="fa-solid fa-trash-can"></i>
-                    លុបទាំងអស់
+                    <i class="fa-solid fa-trash-can"></i> លុបទាំងអស់
                 </button>
             </div>
             <div class="history-list" id="historyList">
@@ -695,18 +875,74 @@
             </div>
         </div>
 
-        <footer class="app-footer">
-            <span>អភិវឌ្ឍន៍ដោយ</span>
-            <span class="author">Sochhat Rotha</span>
-        </footer>
+        <!-- Footer Time -->
+        <div class="footer-time" id="footerTime"></div>
     </div>
 
+    <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fa-solid fa-circle-check"></i>
         <span id="toastMessage"></span>
     </div>
 
     <script>
+        // ============ CLOCK & STATUS BAR ============
+        function updateStatusClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('statusTime').textContent = `${hours}:${minutes}`;
+            document.getElementById('footerTime').textContent = `📱 ម៉ោងចុងក្រោយ: ${hours}:${minutes}:${seconds}`;
+        }
+
+        // ============ COUNTDOWN ============
+        function updateCountdown() {
+            const now = new Date();
+            let targetDate = new Date(now.getFullYear(), now.getMonth(), 10);
+
+            // If past 10th, move to next month
+            if (now.getDate() >= 10 && (now.getDate() > 10 || now.getHours() > 0 || now.getMinutes() > 0 || now.getSeconds() > 0)) {
+                targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 10);
+            }
+
+            // Update target date display
+            const months = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'];
+            document.getElementById('targetDateDisplay').textContent = 
+                `ថ្ងៃទី 10 ខែ${months[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
+
+            // Calculate total duration for progress bar
+            let startDate = new Date(targetDate.getFullYear(), targetDate.getMonth() - 1, 10);
+            const totalDuration = targetDate - startDate;
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                document.getElementById('progress').style.width = '0%';
+                document.getElementById('progressPercent').textContent = '0%';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            const progressPercentage = ((diff / totalDuration) * 100).toFixed(1);
+            document.getElementById('progress').style.width = progressPercentage + '%';
+            document.getElementById('progressPercent').textContent = progressPercentage + '%';
+        }
+
+        // ============ EXAM SEAT FINDER ============
         const SEATS_PER_ROOM = 25;
         const MAX_HISTORY = 10;
         const STORAGE_KEY = 'exam_seat_history';
@@ -730,9 +966,15 @@
             loadTheme();
             renderHistory();
             generateSeatGrid();
+            updateStatusClock();
+            updateCountdown();
+            
+            setInterval(updateStatusClock, 1000);
+            setInterval(updateCountdown, 1000);
+            
             setTimeout(() => {
                 document.getElementById('globalSeatNumber').focus();
-            }, 500);
+            }, 800);
         });
 
         function generateSeatGrid() {
@@ -766,7 +1008,7 @@
             if (currentResult && currentResult.localSeat === seatNumber) {
                 showToast(`នេះជាតុលេខ ${seatNumber} របស់អ្នក`, 'success');
             } else {
-                showToast(`តុលេខ ${seatNumber} - មិនមែនជាទីតាំងរបស់អ្នក`, 'error');
+                                showToast(`តុលេខ ${seatNumber} - មិនមែនទីតាំងរបស់អ្នក`, 'error');
                 const seatEl = document.getElementById(`seat-${seatNumber}`);
                 if (seatEl) {
                     seatEl.style.background = 'var(--orange-accent)';
